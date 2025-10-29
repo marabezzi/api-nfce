@@ -3,28 +3,28 @@ package br.com.atom.api_nfce.dtos;
 import java.math.BigDecimal;
 import java.util.List;
 
+import br.com.atom.api_nfce.enuns.Ambiente;
 import lombok.Data;
-@Data 
+@Data
 public class NfceRequestDTO {
 
-    //Dados do emitente
+    // Emitente
     private String cnpjEmitente;
     private String ieEmitente;
+    private String uf;              // "SP", "PR", etc.
     private String razaoSocial;
     private String nomeFantasia;
 
-    //Identificação da NFC-e
+    // Identificação
     private Integer numeroNota;
     private Integer serie;
-    private String ambiente;
+    private Ambiente ambiente;      // PROD ou HOM
 
-    //Itens
+    // Itens & Pagamentos
     private List<ItemVenda> itens;
-
-    //Pagamento (ex. dinheiro, cartão, pix)
     private List<FormaPagamento> pagamentos;
 
-
+    @Data
     public static class ItemVenda {
         private String descricao;
         private String ncm;
@@ -34,8 +34,9 @@ public class NfceRequestDTO {
         private BigDecimal aliquotaIcms;
     }
 
-    public static class FormaPagamento{
-        private String tipo;
+    @Data
+    public static class FormaPagamento {
+        private String tipo;        // "01","03","04","17", etc.
         private BigDecimal valor;
     }
 }

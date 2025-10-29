@@ -7,32 +7,30 @@ import br.com.atom.api_nfce.dtos.NfceRequestDTO;
 @Component
 public class XmlBuilder {
 
-    public String montarXmlNfce(NfceRequestDTO dto){
-
-         // IMPORTANTE:
-        // - Aqui você deve montar exatamente o layout "NFe" (modelo 65), com infNFe, ide, emit, dest (pode ser consumidor final sem CPF/CNPJ), det(itens), total, pag, infAdic etc.
-        // - Também precisa gerar a chave de acesso (cUF + data + CNPJ + modelo 65 + série + número + tpEmis + cNF + DV)
-
-        // Abaixo é só um placeholder simplificado para amarrar o fluxo:
-        return "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" +
-          "<infNFe versao=\"4.00\" Id=\"NFeFAKECHAVE\">" +
-          "<ide>"+
-          "<cUF>35</cUF>"+
-          "<mod>65</mod>"+
-          "<serie>" + dto.getSerie() + "</serie>"+
-          "<nNF>" + dto.getNumeroNota() + "</nNF>"+
-          "<tpAmb>" + ("PROD".equals(dto.getAmbiente()) ? "1" : "2") + "/tpAmb>" +
-          "<finNFe>1</finNFe>"+             //Operaçao normal
-          "<indFinal>1</indFinal>"+         //Consumidor final
-          "<indPres>1</indPres>"+           //Operação presencial
-          "</ide>"+
-          "<emit>" +
+    public String montarXmlNfce(NfceRequestDTO dto) {
+        // TODO: Implementar layout completo 4.00 (modelo 65), gerar chave de acesso, etc.
+        // Placeholder para manter o fluxo compilável:
+        String tpAmb = dto.getAmbiente() == null ? "2" : ("PROD".equals(dto.getAmbiente().name()) ? "1" : "2");
+        return
+            "<NFe xmlns=\"http://www.portalfiscal.inf.br/nfe\">" +
+              "<infNFe versao=\"4.00\" Id=\"NFeFAKECHAVE\">" +
+                "<ide>" +
+                  "<cUF>35</cUF>" +
+                  "<mod>65</mod>" +
+                  "<serie>" + dto.getSerie() + "</serie>" +
+                  "<nNF>" + dto.getNumeroNota() + "</nNF>" +
+                  "<tpAmb>" + tpAmb + "</tpAmb>" +
+                  "<finNFe>1</finNFe>" +
+                  "<indFinal>1</indFinal>" +
+                  "<indPres>1</indPres>" +
+                "</ide>" +
+                "<emit>" +
                   "<CNPJ>" + dto.getCnpjEmitente() + "</CNPJ>" +
                   "<IE>" + dto.getIeEmitente() + "</IE>" +
                   "<xNome>" + dto.getRazaoSocial() + "</xNome>" +
                 "</emit>" +
-                // ... det (itens), total, pag, etc ...
+                // TODO: det(itens), total, pag (detPag), infAdic, QRCode, etc.
               "</infNFe>" +
             "</NFe>";
-    }  
+    }
 }
